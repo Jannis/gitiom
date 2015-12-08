@@ -26,7 +26,7 @@
                             (.getId))
                        (.getObjectId (.getLeaf jref)))
           head       (when head-oid (commit/load repo head-oid))]
-      (->Reference name (if tag? "tag" "branch") tag head))))
+      (->Reference name (if tag? :tag :branch) tag head))))
 
 (defn load [repo name]
   (some->> (to-git-ref-name name)

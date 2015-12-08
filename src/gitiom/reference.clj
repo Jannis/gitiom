@@ -2,9 +2,7 @@
   (:import [org.eclipse.jgit.lib Constants RefUpdate RefUpdate$Result])
   (:refer-clojure :exclude [load])
   (:require [clojure.string :as str]
-            [gitiom.coerce :refer [to-git-ref-name
-                                   to-ref-name
-                                   to-oid]]
+            [gitiom.coerce :refer [to-oid]]
             [gitiom.commit :as commit]
             [gitiom.repo :refer [object-type rev-walk]]
             [gitiom.tag :as tag]))
@@ -13,10 +11,9 @@
 
 (defn to-reference [repo jref]
   (when jref
-    (let [git-name   (.getName jref)
-          name       (to-ref-name git-name)
+    (let [name       (.getName jref)
           oid        (.getObjectId jref)
-          tag?       (re-matches #"^refs/tags/" git-name)
+          tag?       (re-matches #"^refs/tags/" name)
           annotated? (when oid (= Constants/OBJ_TAG (object-type repo oid)))
           tag        (when annotated? (tag/load repo (.getObjectId jref)))
           head-oid   (if tag
@@ -29,7 +26,7 @@
       (->Reference name (if tag? :tag :branch) tag head))))
 
 (defn load [repo name]
-  (some->> (to-git-ref-name name)
+  (some->> name
            (.getRef (.getRepository repo))
            (to-reference repo)))
 

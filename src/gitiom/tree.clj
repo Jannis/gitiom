@@ -44,6 +44,12 @@
       (.flush inserter)
       (load repo oid))))
 
+(defn walk
+  ([repo trees]
+   (walk repo trees false))
+  ([repo trees recursive]
+   (tree-walk repo (map #(to-jtree repo %) trees) recursive)))
+
 (defn get-tree [repo tree subtree-name]
   (let [jtree (to-jtree repo tree)
         walk  (tree-walk-for-entry repo jtree subtree-name)]

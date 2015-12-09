@@ -23,10 +23,13 @@
   (RevWalk. (.getRepository repo)))
 
 (defn tree-walk
-  [repo trees]
-  (let [tw (TreeWalk. (.getRepository repo))]
-    (doseq [t trees] (.addTree tw t))
-    tw))
+  ([repo trees]
+   (tree-walk repo trees false))
+  ([repo trees recursive]
+   (let [tw (TreeWalk. (.getRepository repo))]
+     (doseq [t trees] (.addTree tw t))
+     (.setRecursive tw (boolean recursive))
+     tw)))
 
 (defn tree-walk-for-entry [repo tree path]
   (TreeWalk/forPath (.getRepository repo) path tree))

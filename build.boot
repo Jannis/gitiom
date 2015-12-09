@@ -3,17 +3,29 @@
 (set-env!
  :source-paths #{}
  :resource-paths #{"src"}
- :dependencies '[[clj-jgit "0.8.8"]])
+ :dependencies '[[adzerk/bootlaces "0.1.13"]
+                 [clj-jgit "0.8.8"]])
+
+(require '[adzerk.bootlaces :refer :all]
+         '[boot.git :refer [last-commit]])
+
+(def version "0.1.0")
+
+(bootlaces! version)
 
 (task-options!
+ push {:repo "deploy"
+       :ensure-branch "master"
+       :ensure-clean true
+       :ensure-tag (last-commit)
+       :ensure-version version}
  pom {:project 'gitiom
-      :version "0.1.0-SNAPSHOT"})
-
-(deftask uberjar
-  []
-  (comp (pom)
-        (uber)
-        (jar)))
+      :version version
+      :description "Idiomatic Git for Clojure"
+      :url "https://github.com/jannis/gitiom"
+      :scm {:url "https://github.com/jannis/gitiom"}
+      :license {"GNU LGPL v2.1"
+                "http://www.gnu.org/licenses/lgpl-2.1.en.html"}})
 
 (deftask deploy
   []

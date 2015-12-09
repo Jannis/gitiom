@@ -13,7 +13,7 @@
   (when jref
     (let [name       (.getName jref)
           oid        (.getObjectId jref)
-          tag?       (re-matches #"^refs/tags/" name)
+          tag?       (re-matches #"refs/tags/.+" name)
           annotated? (when oid (= Constants/OBJ_TAG (object-type repo oid)))
           tag        (when annotated? (tag/load repo (.getObjectId jref)))
           head-oid   (if tag

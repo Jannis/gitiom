@@ -9,7 +9,7 @@
 (require '[adzerk.bootlaces :refer :all]
          '[boot.git :refer [last-commit]])
 
-(def version "0.1.0")
+(def version "0.1.1-SNAPSHOT")
 
 (bootlaces! version)
 
